@@ -161,20 +161,27 @@
     .sections {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1rem;
-      padding-block: 1rem 4rem;
+      gap: clamp(1.5rem, 4vw, 3rem);
+      padding-block: 2rem 4.5rem;
+      border-top: 0.1rem solid var(--line);
     }
 
     section {
-      padding: 1.2rem;
-      border: 0.1rem solid var(--line);
-      border-radius: 0.5rem;
-      background: var(--panel);
+      padding-block: 0.2rem;
+    }
+
+    section + section {
+      padding-left: clamp(1rem, 3vw, 2rem);
+      border-left: 0.1rem solid var(--line);
     }
 
     section ul {
       padding-left: 1.2rem;
       margin-block: 0.6rem 0;
+    }
+
+    section li + li {
+      margin-top: 0.35rem;
     }
 
     footer {
@@ -202,6 +209,19 @@
       .hero {
         min-height: auto;
       }
+
+      .sections {
+        gap: 0;
+        padding-block: 1.5rem 3rem;
+      }
+
+      section + section {
+        margin-top: 1.4rem;
+        padding-top: 1.4rem;
+        padding-left: 0;
+        border-top: 0.1rem solid var(--line);
+        border-left: 0;
+      }
     }
   </style>
 </head>
@@ -211,7 +231,7 @@
       <img src="icons/icon-48.png" width="48" height="48" alt="">
       <span>Image Zoom</span>
     </a>
-    <nav aria-label="Main navigation">
+    <nav aria-label="Main">
       <ul>
         <li><a href="privacy/">Privacy</a></li>
         <li><a href="https://github.com/liewcf/imagezoom">Source</a></li>

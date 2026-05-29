@@ -32,6 +32,25 @@ test('GitHub Pages site and privacy page are present', () => {
   assert.match(privacy, /does not collect, store, sell, or share user data/);
 });
 
+test('source site preview has the assets referenced by the homepage', () => {
+  for (const asset of [
+    'icons/icon-48.png',
+    'store-assets/screenshot-overlay-1280x800.png',
+  ]) {
+    assert.ok(fs.existsSync(`site/${asset}`), `${asset} missing from site preview`);
+    assert.deepEqual(fs.readFileSync(`site/${asset}`), fs.readFileSync(asset));
+  }
+});
+
+test('homepage navigation and feature sections stay simple', () => {
+  const index = read('site/index.html');
+
+  assert.match(index, /<nav aria-label="Main">/);
+  assert.doesNotMatch(index, /aria-label="Main navigation"/);
+  assert.match(index, /\.sections\s*{[^}]*border-top:\s*0\.1rem solid var\(--line\)/s);
+  assert.doesNotMatch(index, /section\s*{[^}]*background:\s*var\(--panel\)/s);
+});
+
 test('GitHub Pages workflow deploys only the static site artifact', () => {
   const workflow = read('.github/workflows/pages.yml');
 
