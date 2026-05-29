@@ -39,6 +39,7 @@ test('GitHub Pages workflow deploys only the static site artifact', () => {
   assert.match(workflow, /actions\/upload-pages-artifact@v4/);
   assert.match(workflow, /actions\/deploy-pages@v4/);
   assert.match(workflow, /path: _site/);
+  assert.match(workflow, /FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true/);
 });
 
 test('local-only agent memory is ignored and MIT license is present', () => {
