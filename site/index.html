@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Zoom</title>
+  <meta name="description" content="Image Zoom is a small Chrome extension for zooming images on web pages.">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f3ec;
+      --ink: #17201b;
+      --muted: #5c655f;
+      --panel: #fffdf8;
+      --line: #d8d0c2;
+      --green: #176b4d;
+      --blue: #245f83;
+      --gold: #b57915;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration-thickness: 0.08em;
+      text-underline-offset: 0.18em;
+    }
+
+    a:focus-visible {
+      outline: 0.18rem solid var(--gold);
+      outline-offset: 0.2rem;
+    }
+
+    header,
+    main,
+    footer {
+      width: min(68rem, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-block: 1rem;
+    }
+
+    nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: var(--ink);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(18rem, 1.1fr);
+      gap: clamp(1.5rem, 4vw, 3.5rem);
+      align-items: center;
+      min-height: 74vh;
+      padding-block: clamp(2rem, 6vw, 5rem);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 7vw, 5.6rem);
+      line-height: 0.95;
+      text-wrap: balance;
+    }
+
+    h2 {
+      margin: 0 0 0.8rem;
+      font-size: 1.45rem;
+      line-height: 1.2;
+    }
+
+    p {
+      margin: 0;
+      text-wrap: pretty;
+    }
+
+    .lede {
+      max-width: 36rem;
+      margin-block: 1rem 1.5rem;
+      color: var(--muted);
+      font-size: 1.2rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.8rem;
+      padding: 0.7rem 1rem;
+      border: 0.1rem solid var(--green);
+      border-radius: 0.45rem;
+      background: var(--green);
+      color: white;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--green);
+    }
+
+    .screenshot {
+      margin: 0;
+    }
+
+    .screenshot img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 0.1rem solid var(--line);
+      border-radius: 0.5rem;
+      background: var(--panel);
+      box-shadow: 0 1rem 2rem rgb(23 32 27 / 14%);
+    }
+
+    .screenshot figcaption {
+      margin-top: 0.6rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .sections {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      padding-block: 1rem 4rem;
+    }
+
+    section {
+      padding: 1.2rem;
+      border: 0.1rem solid var(--line);
+      border-radius: 0.5rem;
+      background: var(--panel);
+    }
+
+    section ul {
+      padding-left: 1.2rem;
+      margin-block: 0.6rem 0;
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.8rem;
+      padding-block: 1.5rem;
+      border-top: 0.1rem solid var(--line);
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 760px) {
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .hero,
+      .sections {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="./" aria-label="Image Zoom home">
+      <img src="icons/icon-48.png" width="48" height="48" alt="">
+      <span>Image Zoom</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="privacy/">Privacy</a></li>
+        <li><a href="https://github.com/liewcf/imagezoom">Source</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <h1>Image Zoom</h1>
+        <p class="lede">A small Chrome extension for zooming images on normal web pages. It has no popup, no account, no analytics, no storage, and no server.</p>
+        <div class="actions" aria-label="Project links">
+          <a class="button" href="https://github.com/liewcf/imagezoom">View source</a>
+          <a class="button secondary" href="privacy/">Privacy policy</a>
+        </div>
+      </div>
+      <figure class="screenshot">
+        <img src="store-assets/screenshot-overlay-1280x800.png" width="1280" height="800" alt="Image Zoom showing a full-page zoom overlay on a test image." fetchpriority="high">
+        <figcaption>Click an image to open the overlay, then scroll to zoom and drag to pan.</figcaption>
+      </figure>
+    </div>
+
+    <div class="sections">
+      <section>
+        <h2>What it does</h2>
+        <ul>
+          <li>Hover over an image and scroll to zoom inline.</li>
+          <li>Click an image to open a zoom overlay.</li>
+          <li>Press Escape or click the dark background to close.</li>
+        </ul>
+      </section>
+      <section>
+        <h2>What it avoids</h2>
+        <ul>
+          <li>No popup or settings page in version 0.1.0.</li>
+          <li>No analytics, accounts, cookies, or remote service.</li>
+          <li>No extra Chrome API permissions.</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Status</h2>
+        <p>Version 0.1.0 is prepared for Chrome Web Store submission. The public source and privacy policy are available now.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <span>Image Zoom 0.1.0</span>
+    <span><a href="https://github.com/liewcf/imagezoom/issues">Support</a></span>
+  </footer>
+</body>
+</html>

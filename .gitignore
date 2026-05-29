@@ -1,5 +1,7 @@
 .DS_Store
 Thumbs.db
+AGENTS.md
+docs/
 *.crx
 *.pem
 dist/*.zip

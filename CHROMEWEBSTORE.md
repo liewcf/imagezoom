@@ -81,7 +81,11 @@ No.
 
 ## Privacy Policy
 
-Host `PRIVACY.md` at a public HTTPS URL before submission, then paste that URL into the Chrome Web Store Developer Dashboard.
+Use this public privacy policy URL in the Chrome Web Store Developer Dashboard:
+
+```text
+https://liewcf.github.io/imagezoom/privacy/
+```
 
 ## Distribution
 
@@ -103,11 +107,11 @@ Owner input needed before submission.
 
 **Support URL / Email**
 
-Owner input needed before submission.
+https://github.com/liewcf/imagezoom/issues
 
 **Homepage URL**
 
-Owner input needed before submission.
+https://liewcf.github.io/imagezoom/
 
 ## Version History
 
@@ -128,6 +132,6 @@ Owner input needed before submission.
 1. Run `scripts/package-extension.sh`.
 2. Upload `dist/image-zoom-v0.1.0.zip` in the Chrome Developer Dashboard.
 3. Fill in the Store Listing, Privacy, and Distribution tabs using this file.
-4. Add the hosted privacy policy URL.
+4. Add the hosted privacy policy URL: `https://liewcf.github.io/imagezoom/privacy/`.
 5. Add the owner publisher name, contact email, support URL or email, and homepage URL.
 6. Submit for review.

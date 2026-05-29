@@ -22,7 +22,7 @@ When an image has a larger `srcset` option, the overlay uses that larger image o
 1. Open `chrome://extensions`.
 2. Turn on Developer mode.
 3. Click Load unpacked.
-4. Choose this folder: `/Users/cheonfongliew/Code/projects/ImageZoom`.
+4. Choose this project folder.
 
 The extension does not run on `chrome://` pages, Chrome Web Store pages, extension pages, or local file URLs.
 
@@ -63,7 +63,19 @@ The ZIP contains only the extension runtime files:
 - `styles.css`
 - `icons/`
 
-Use `CHROMEWEBSTORE.md` for store listing copy, permission notes, privacy disclosure, and submission steps. Host `PRIVACY.md` at a public HTTPS URL before submitting.
+Use `CHROMEWEBSTORE.md` for store listing copy, permission notes, privacy disclosure, and submission steps.
+
+Project page:
+
+```text
+https://liewcf.github.io/imagezoom/
+```
+
+Privacy policy:
+
+```text
+https://liewcf.github.io/imagezoom/privacy/
+```
 
 Store assets are in `store-assets/`.
 
@@ -81,6 +93,7 @@ Run these before saying behavior is fixed:
 node --check content.js
 node --test tests/content.test.js
 node --test tests/manifest.test.js
+node --test tests/public-surface.test.js
 python3 -m json.tool manifest.json
 sh -n scripts/package-extension.sh
 scripts/package-extension.sh
@@ -91,4 +104,4 @@ unzip -t dist/image-zoom-v0.1.0.zip
 
 Version `0.1.0` is prepared for Chrome Web Store submission.
 
-Before submitting, load the extension through `chrome://extensions`, test it on one real image-heavy website, host the privacy policy, and fill in the owner publisher/contact fields in the Chrome Developer Dashboard.
+Before submitting, load the extension through `chrome://extensions`, test it on one real image-heavy website, and fill in the owner publisher/contact fields in the Chrome Developer Dashboard.
