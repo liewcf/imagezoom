@@ -62,6 +62,7 @@ class FakeImage extends FakeElement {
     this.alt = '';
     this.currentSrc = source;
     this.src = source;
+    this.srcset = '';
     this.naturalWidth = width;
     this.naturalHeight = height;
     this.rect = { left: 0, top: 0, width, height };
@@ -207,6 +208,26 @@ test('click opens overlay and background click closes it', () => {
   document.dispatch('click', makeEvent({ target: overlay }));
 
   assert.equal(document.documentElement.children.length, 0);
+});
+
+test('click opens overlay with largest width candidate from srcset', () => {
+  const { document } = loadContentScript();
+  const image = new FakeImage({
+    width: 200,
+    height: 150,
+    source: 'https://example.test/small.jpg'
+  });
+  image.srcset = [
+    'https://example.test/small.jpg 400w',
+    'https://example.test/large.jpg 1600w',
+    'https://example.test/medium.jpg 800w'
+  ].join(', ');
+
+  document.dispatch('click', makeEvent({ target: image }));
+  const overlay = document.documentElement.children[0];
+  const overlayImage = overlay.children[0];
+
+  assert.equal(overlayImage.src, 'https://example.test/large.jpg');
 });
 
 test('overlay wheel with zero delta does not zoom or block page scroll', () => {

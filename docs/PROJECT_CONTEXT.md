@@ -14,7 +14,7 @@
 - `content.js` targets normal `HTMLImageElement` images only.
 - Images are ignored unless rendered width/height and natural width/height are all at least `80px`.
 - Hover adds the `iz-zoom-target` class. Wheel zooms inline from `1x` to `5x`.
-- Clicking a useful image opens a fixed overlay. Overlay wheel zooms from `1x` to `8x`; dragging pans; Escape or background click closes it.
+- Clicking a useful image opens a fixed overlay. If the image has `srcset`, the overlay uses the largest existing candidate. Overlay wheel zooms from `1x` to `8x`; dragging pans; Escape or background click closes it.
 - Wheel handlers do not call `preventDefault()` when `deltaY === 0` or when zoom is already at its min/max bound.
 
 ## Development Workflow

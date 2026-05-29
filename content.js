@@ -23,6 +23,56 @@
     return image.currentSrc || image.src || '';
   }
 
+  function parseSrcsetCandidate(candidate) {
+    const parts = candidate.trim().split(/\s+/);
+    const url = parts[0] || '';
+    const descriptor = parts[1] || '1x';
+
+    if (!url) return null;
+
+    if (/^\d+w$/.test(descriptor)) {
+      return {
+        url,
+        type: 'width',
+        value: Number.parseInt(descriptor, 10)
+      };
+    }
+
+    if (/^(\d+|\d*\.\d+)x$/.test(descriptor)) {
+      return {
+        url,
+        type: 'density',
+        value: Number.parseFloat(descriptor)
+      };
+    }
+
+    return {
+      url,
+      type: 'density',
+      value: 1
+    };
+  }
+
+  function getBestSrcsetSource(srcset) {
+    const candidates = String(srcset || '')
+      .split(',')
+      .map(parseSrcsetCandidate)
+      .filter(Boolean);
+
+    if (candidates.length === 0) return '';
+
+    const widthCandidates = candidates.filter((candidate) => candidate.type === 'width');
+    const usefulCandidates = widthCandidates.length > 0 ? widthCandidates : candidates;
+
+    return usefulCandidates.reduce((best, candidate) => {
+      return candidate.value > best.value ? candidate : best;
+    }).url;
+  }
+
+  function getBestImageSource(image) {
+    return getBestSrcsetSource(image.srcset) || getImageSource(image);
+  }
+
   function isUsefulImage(target) {
     if (!(target instanceof HTMLImageElement)) return false;
     if (!getImageSource(target)) return false;
@@ -105,7 +155,7 @@
   }
 
   function openOverlay(image) {
-    const source = getImageSource(image);
+    const source = getBestImageSource(image);
     if (!source || overlayState) return;
 
     const overlay = document.createElement('div');

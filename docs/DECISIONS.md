@@ -7,3 +7,4 @@
 - Omit custom icons for now. Rationale: Chrome can use its default icon, and the manifest must not reference missing icon files.
 - Ignore images smaller than `80px` by both rendered and natural dimensions. Rationale: this avoids most icons, avatars, sprites, unloaded images, and tracking pixels.
 - Do not block wheel events when zoom cannot change or `deltaY === 0`. Rationale: page scrolling should keep working at zoom bounds and for horizontal or zero-delta wheel gestures.
+- Prefer an existing larger `srcset` candidate for the overlay. Rationale: this gives better pixels on demand without AI upscaling, storage, a service worker, or extra permissions.

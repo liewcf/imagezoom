@@ -10,6 +10,8 @@ Image Zoom is a small Chrome extension for zooming images on web pages.
 - In the overlay, scroll to zoom and drag to pan.
 - Press Escape or click the dark background to close the overlay.
 
+When an image has a larger `srcset` option, the overlay uses that larger image on demand.
+
 Tiny images under 80px wide or 80px tall are ignored.
 
 ## Install In Chrome
