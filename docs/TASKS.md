@@ -14,6 +14,7 @@
   - `python3 -m json.tool manifest.json` passed.
   - `node --check content.js` passed.
   - `node --test tests/content.test.js` passed with `10/10` tests.
+  - `main` contains commit `259a266` with the `srcset` overlay source upgrade.
   - `rg -n "\"icons\"|\"default_icon\"" manifest.json` returned no matches, as expected.
   - Manual browser check through `tests/manual.html` covered inline wheel zoom, reset, overlay open, overlay zoom, overlay drag, Escape close, background click close, and tiny-image ignored.
 - Not yet verified:

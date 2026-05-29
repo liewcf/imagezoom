@@ -4,7 +4,7 @@
 
 - Project purpose: Image Zoom is a small Chrome extension for zooming images on web pages.
 - Primary users: The owner using Chrome with the extension loaded unpacked for personal browsing.
-- Current status: Version `0.1.0` is implemented and locally verified. It has not yet been verified by loading the unpacked extension through `chrome://extensions`.
+- Current status: Version `0.1.0` is implemented on `main` and locally verified. It has not yet been verified by loading the unpacked extension through `chrome://extensions`.
 
 ## Architecture
 
