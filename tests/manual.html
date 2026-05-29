@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Image Zoom Manual Test</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        line-height: 1.5;
+        color: #1f2933;
+        background: #f6f7f9;
+      }
+
+      main {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 32px 20px 80px;
+      }
+
+      h1 {
+        margin: 0 0 20px;
+        font-size: 28px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+      }
+
+      figure {
+        margin: 0;
+        padding: 16px;
+        background: #fff;
+        border: 1px solid #d8dde6;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+      }
+
+      .tiny {
+        width: 48px;
+        height: 48px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Image Zoom Manual Test</h1>
+      <div class="grid">
+        <figure>
+          <img alt="Large landscape test image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='540' viewBox='0 0 900 540'%3E%3Crect width='900' height='540' fill='%23dbeafe'/%3E%3Ccircle cx='240' cy='210' r='120' fill='%23f97316'/%3E%3Crect x='430' y='120' width='310' height='250' fill='%230f766e'/%3E%3Ctext x='450' y='430' font-family='Arial' font-size='54' fill='%23111827'%3ELandscape%3C/text%3E%3C/svg%3E">
+          <figcaption>Large image: hover, wheel, and click should work.</figcaption>
+        </figure>
+
+        <figure>
+          <img alt="Tall portrait test image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='860' viewBox='0 0 420 860'%3E%3Crect width='420' height='860' fill='%23ecfccb'/%3E%3Crect x='70' y='90' width='280' height='680' fill='%238b5cf6'/%3E%3Ccircle cx='210' cy='300' r='90' fill='%23facc15'/%3E%3Ctext x='90' y='810' font-family='Arial' font-size='42' fill='%23111827'%3EPortrait%3C/text%3E%3C/svg%3E">
+          <figcaption>Tall image: overlay should fit inside the screen.</figcaption>
+        </figure>
+
+        <figure>
+          <img alt="Wide banner test image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='360' viewBox='0 0 1200 360'%3E%3Crect width='1200' height='360' fill='%23fee2e2'/%3E%3Cpath d='M0 260 C220 80 360 420 590 210 C780 40 940 320 1200 120 L1200 360 L0 360 Z' fill='%230ea5e9'/%3E%3Ctext x='430' y='190' font-family='Arial' font-size='58' fill='%23111827'%3EWide image%3C/text%3E%3C/svg%3E">
+          <figcaption>Wide image: zoom and overlay should work.</figcaption>
+        </figure>
+
+        <figure>
+          <img class="tiny" alt="Small icon test image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='8' fill='%231f2937'/%3E%3Ccircle cx='24' cy='24' r='12' fill='%23fff'/%3E%3C/svg%3E">
+          <figcaption>Small icon: zoom cursor and click overlay should not activate.</figcaption>
+        </figure>
+      </div>
+    </main>
+    <script src="../content.js"></script>
+  </body>
+</html>
