@@ -19,6 +19,12 @@
     return Math.round(value * 100) / 100;
   }
 
+  function setImportantStyles(element, styles) {
+    for (const [name, value] of Object.entries(styles)) {
+      element.style.setProperty(name, value, 'important');
+    }
+  }
+
   function getImageSource(image) {
     return image.currentSrc || image.src || '';
   }
@@ -168,6 +174,28 @@
     overlayImage.decoding = 'async';
     overlayImage.draggable = false;
 
+    setImportantStyles(overlay, {
+      position: 'fixed',
+      inset: '0',
+      'z-index': '2147483647',
+      display: 'flex',
+      'align-items': 'center',
+      'justify-content': 'center',
+      background: 'rgba(0, 0, 0, 0.88)',
+      cursor: 'zoom-out'
+    });
+    setImportantStyles(overlayImage, {
+      'max-width': '92vw',
+      'max-height': '92vh',
+      'object-fit': 'contain',
+      'transform-origin': 'center center',
+      transition: 'transform 80ms ease',
+      cursor: 'grab',
+      'user-select': 'none',
+      '-webkit-user-drag': 'none',
+      'will-change': 'transform'
+    });
+
     overlay.append(overlayImage);
     document.documentElement.append(overlay);
 
@@ -240,6 +268,10 @@
     overlayState.startOffsetX = overlayState.x;
     overlayState.startOffsetY = overlayState.y;
     overlayState.image.classList.add('iz-dragging');
+    setImportantStyles(overlayState.image, {
+      cursor: 'grabbing',
+      transition: 'none'
+    });
     overlayState.image.setPointerCapture(event.pointerId);
   }
 
@@ -256,6 +288,10 @@
 
     overlayState.dragging = false;
     overlayState.image.classList.remove('iz-dragging');
+    setImportantStyles(overlayState.image, {
+      cursor: 'grab',
+      transition: 'transform 80ms ease'
+    });
   }
 
   function onClick(event) {

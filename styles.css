@@ -8,31 +8,3 @@
   transition: transform 120ms ease !important;
   will-change: transform !important;
 }
-
-.iz-overlay {
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 2147483647 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: rgba(0, 0, 0, 0.88) !important;
-  cursor: zoom-out !important;
-}
-
-.iz-overlay-image {
-  max-width: 92vw !important;
-  max-height: 92vh !important;
-  object-fit: contain !important;
-  transform-origin: center center !important;
-  transition: transform 80ms ease !important;
-  cursor: grab !important;
-  user-select: none !important;
-  -webkit-user-drag: none !important;
-  will-change: transform !important;
-}
-
-.iz-overlay-image.iz-dragging {
-  cursor: grabbing !important;
-  transition: none !important;
-}

@@ -5,6 +5,11 @@ const test = require('node:test');
 const vm = require('node:vm');
 
 class FakeStyle {
+  setProperty(name, value) {
+    const key = name.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+    this[key] = value;
+  }
+
   removeProperty(name) {
     const key = name.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
     delete this[key];
@@ -128,6 +133,12 @@ function loadContentScript() {
   new vm.Script(code).runInContext(context);
   return { document };
 }
+
+test('stylesheet does not expose global overlay selectors to page content', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'styles.css'), 'utf8');
+
+  assert.doesNotMatch(css, /(^|})\s*\.iz-overlay\b/);
+});
 
 test('hover marks useful images and ignores tiny images', () => {
   const { document } = loadContentScript();
