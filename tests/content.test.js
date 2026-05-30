@@ -163,9 +163,40 @@ test('hover ignores images with unknown natural size', () => {
   assert.equal(image.classList.contains('iz-zoom-target'), false);
 });
 
-test('wheel zooms a useful image inline and resets at minimum zoom', () => {
+test('wheel before image click does not zoom or block page scroll', () => {
   const { document } = loadContentScript();
   const image = new FakeImage({ width: 200, height: 150 });
+
+  const event = document.dispatch('wheel', makeEvent({ target: image, deltaY: -100 }));
+
+  assert.equal(event.defaultPrevented, false);
+  assert.equal(image.classList.contains('iz-inline-zoomed'), false);
+  assert.equal(image.style.transform, undefined);
+});
+
+test('clicking one image does not unlock wheel zoom for another image', () => {
+  const { document } = loadContentScript();
+  const clickedImage = new FakeImage({ width: 200, height: 150 });
+  const otherImage = new FakeImage({ width: 200, height: 150 });
+
+  document.dispatch('click', makeEvent({ target: clickedImage }));
+  const overlay = document.documentElement.children[0];
+  document.dispatch('click', makeEvent({ target: overlay }));
+
+  const event = document.dispatch('wheel', makeEvent({ target: otherImage, deltaY: -100 }));
+
+  assert.equal(event.defaultPrevented, false);
+  assert.equal(otherImage.classList.contains('iz-inline-zoomed'), false);
+  assert.equal(otherImage.style.transform, undefined);
+});
+
+test('wheel zooms a clicked useful image inline and resets at minimum zoom', () => {
+  const { document } = loadContentScript();
+  const image = new FakeImage({ width: 200, height: 150 });
+
+  document.dispatch('click', makeEvent({ target: image }));
+  const overlay = document.documentElement.children[0];
+  document.dispatch('click', makeEvent({ target: overlay }));
 
   const zoomInEvent = document.dispatch(
     'wheel',

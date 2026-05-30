@@ -1,6 +1,6 @@
 # Chrome Web Store Listing - Image Zoom
 
-> Last Updated: 2026-05-29
+> Last Updated: 2026-05-30
 
 ## Store Listing
 
@@ -10,13 +10,13 @@ Image Zoom
 
 **Short Description**
 
-Zoom images on web pages with hover wheel zoom and click overlay zoom.
+Zoom images with click-first inline zoom and a full-page overlay.
 
 **Detailed Description**
 
 Image Zoom lets you zoom images on normal web pages without opening a new tab.
 
-Hover over a useful image and scroll the mouse wheel to zoom it inline. Click the image to open a full-page overlay. In the overlay, scroll to zoom, drag to pan, press Escape to close, or click the dark background to close.
+Click a useful image to open a full-page overlay. After an image has been clicked once, scroll over that same image to zoom it inline. In the overlay, scroll to zoom, drag to pan, press Escape to close, or click the dark background to close.
 
 The extension ignores tiny images under 80px wide or 80px tall, which helps avoid icons, avatars, sprites, unloaded images, and tracking pixels.
 
@@ -28,7 +28,7 @@ Photos
 
 **Single Purpose**
 
-Let users zoom images on http and https web pages inline or in a full-page overlay.
+Let users zoom selected images on http and https web pages inline or in a full-page overlay.
 
 **Primary Language**
 
@@ -50,8 +50,8 @@ Use `store-assets/screenshot-overlay-1280x800.png` as the first screenshot. It s
 
 | Permission | Type | Justification |
 |------------|------|---------------|
-| `http://*/*` | content script match | Image Zoom needs to run on normal http pages so it can detect image elements under the pointer and provide inline and overlay zoom. |
-| `https://*/*` | content script match | Image Zoom needs to run on normal https pages so it can detect image elements under the pointer and provide inline and overlay zoom. |
+| `http://*/*` | content script match | Image Zoom needs to run on normal http pages so it can detect image elements under the pointer and provide click-first inline zoom and overlay zoom. |
+| `https://*/*` | content script match | Image Zoom needs to run on normal https pages so it can detect image elements under the pointer and provide click-first inline zoom and overlay zoom. |
 
 The extension requests no Chrome API permissions and no `host_permissions`.
 

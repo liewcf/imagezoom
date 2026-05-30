@@ -9,6 +9,7 @@
   const ZOOM_STEP = 0.25;
 
   const inlineZoom = new WeakMap();
+  const clickedImages = new WeakSet();
   let overlayState = null;
 
   function clamp(value, min, max) {
@@ -142,6 +143,7 @@
   function onWheel(event) {
     if (overlayState) return;
     if (!isUsefulImage(event.target)) return;
+    if (!clickedImages.has(event.target)) return;
     if (event.deltaY === 0) return;
 
     const image = event.target;
@@ -302,6 +304,7 @@
 
     if (!isUsefulImage(event.target)) return;
 
+    clickedImages.add(event.target);
     event.preventDefault();
     event.stopPropagation();
     openOverlay(event.target);

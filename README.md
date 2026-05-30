@@ -9,8 +9,8 @@ It has no popup, no account, no analytics, no storage, and no server. It runs as
 ## What It Does
 
 - Hover over a useful image to show the zoom cursor.
-- Scroll the mouse wheel while hovering an image to zoom it inline.
 - Click an image to open the full-page zoom overlay.
+- After an image has been clicked once, scroll over that same image to zoom it inline.
 - In the overlay, scroll to zoom and drag to pan.
 - Press Escape or click the dark background to close the overlay.
 - Ignore tiny images under 80px wide or 80px tall.
@@ -104,4 +104,4 @@ unzip -t dist/image-zoom-v0.1.0.zip
 
 Version `0.1.0` is prepared for Chrome Web Store submission.
 
-Before submitting, load the extension through `chrome://extensions`, test it on one real image-heavy website, and fill in the owner publisher/contact fields in the Chrome Developer Dashboard.
+Before submitting, regenerate the ZIP after source changes, load the extension through `chrome://extensions`, test it on one real image-heavy website, and fill in the owner publisher/contact fields in the Chrome Developer Dashboard.

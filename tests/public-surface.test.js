@@ -51,6 +51,20 @@ test('homepage navigation and feature sections stay simple', () => {
   assert.doesNotMatch(index, /section\s*{[^}]*background:\s*var\(--panel\)/s);
 });
 
+test('public copy describes click-first inline zoom', () => {
+  const readme = read('README.md');
+  const index = read('site/index.html');
+  const listing = read('CHROMEWEBSTORE.md');
+  const removedCopy = /Scroll the mouse wheel while hovering an image to zoom it inline/;
+
+  assert.doesNotMatch(readme, removedCopy);
+  assert.doesNotMatch(index, /Hover over an image and scroll to zoom inline/);
+  assert.doesNotMatch(listing, /hover wheel zoom/i);
+  assert.match(readme, /After an image has been clicked once/);
+  assert.match(index, /After clicking that image once/);
+  assert.match(listing, /click-first inline zoom/);
+});
+
 test('GitHub Pages workflow deploys only the static site artifact', () => {
   const workflow = read('.github/workflows/pages.yml');
 
