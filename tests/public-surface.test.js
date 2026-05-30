@@ -32,6 +32,20 @@ test('GitHub Pages site and privacy page are present', () => {
   assert.match(privacy, /does not collect, store, sell, or share user data/);
 });
 
+test('homepage has social preview metadata for link sharing', () => {
+  const index = read('site/index.html');
+
+  assert.match(index, /<link rel="canonical" href="https:\/\/liewcf\.github\.io\/imagezoom\/">/);
+  assert.match(index, /<meta property="og:type" content="website">/);
+  assert.match(index, /<meta property="og:url" content="https:\/\/liewcf\.github\.io\/imagezoom\/">/);
+  assert.match(index, /<meta property="og:title" content="Image Zoom">/);
+  assert.match(index, /<meta property="og:description" content="Image Zoom is a small Chrome extension for zooming images on web pages\.">/);
+  assert.match(index, /<meta property="og:image" content="https:\/\/liewcf\.github\.io\/imagezoom\/store-assets\/screenshot-overlay-1280x800\.png">/);
+  assert.match(index, /<meta property="og:image:width" content="1280">/);
+  assert.match(index, /<meta property="og:image:height" content="800">/);
+  assert.match(index, /<meta name="twitter:card" content="summary_large_image">/);
+});
+
 test('source site preview has the assets referenced by the homepage', () => {
   for (const asset of [
     'icons/icon-48.png',
