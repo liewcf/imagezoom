@@ -1,6 +1,6 @@
 # Chrome Web Store Listing - Image Zoom
 
-> Last Updated: 2026-05-30
+> Last Updated: 2026-06-02
 
 ## Store Listing
 
@@ -16,7 +16,7 @@ Zoom images with click-first inline zoom and a full-page overlay.
 
 Image Zoom lets you zoom images on normal web pages without opening a new tab.
 
-Click a useful image to open a full-page overlay. After an image has been clicked once, scroll over that same image to zoom it inline. In the overlay, scroll to zoom, drag to pan, press Escape to close, or click the dark background to close.
+Click a useful image that is not inside a link to open a full-page overlay. Linked images keep their normal page link click. After an image has been clicked once, scroll over that same image to zoom it inline. In the overlay, scroll to zoom, drag to pan, press Escape to close, or click the dark background to close.
 
 The extension ignores tiny images under 80px wide or 80px tall, which helps avoid icons, avatars, sprites, unloaded images, and tracking pixels.
 
@@ -117,6 +117,7 @@ https://liewcf.github.io/imagezoom/
 
 | Version | Date | Changes | Status |
 |---------|------|---------|--------|
+| 0.1.1 | 2026-06-02 | Patch version bump, listing copy refresh, and linked-image click handling fix. | Draft |
 | 0.1.0 | 2026-05-29 | Initial Chrome Web Store package with content-script image zoom, PNG icons, store assets, privacy policy text, and clean ZIP packaging. | Draft |
 
 ## Review Notes
@@ -125,12 +126,12 @@ https://liewcf.github.io/imagezoom/
 
 - The extension runs on `http://` and `https://` pages only.
 - It does not run on `chrome://` pages, Chrome Web Store pages, extension pages, or local file URLs.
-- It has no popup, settings page, storage, service worker, or custom site list in version `0.1.0`.
+- It has no popup, settings page, storage, service worker, or custom site list in version `0.1.1`.
 
 ### Submission Steps
 
 1. Run `scripts/package-extension.sh`.
-2. Upload `dist/image-zoom-v0.1.0.zip` in the Chrome Developer Dashboard.
+2. Upload `dist/image-zoom-v0.1.1.zip` in the Chrome Developer Dashboard.
 3. Fill in the Store Listing, Privacy, and Distribution tabs using this file.
 4. Add the hosted privacy policy URL: `https://liewcf.github.io/imagezoom/privacy/`.
 5. Add the owner publisher name, contact email, support URL or email, and homepage URL.

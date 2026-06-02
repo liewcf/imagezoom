@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Image Zoom",
-  "version": "0.1.0",
-  "description": "Zoom images on web pages with hover wheel zoom and click overlay zoom.",
+  "version": "0.1.1",
+  "description": "Zoom selected images on web pages inline or in a full-page overlay.",
   "icons": {
     "16": "icons/icon-16.png",
     "48": "icons/icon-48.png",

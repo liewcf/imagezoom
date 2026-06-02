@@ -58,6 +58,18 @@ class FakeElement {
     return this.children.some((child) => child.contains(node));
   }
 
+  closest(selector) {
+    if (selector !== 'a[href]') return null;
+
+    let node = this;
+    while (node) {
+      if (node.tagName === 'A' && node.href) return node;
+      node = node.parentNode;
+    }
+
+    return null;
+  }
+
   setPointerCapture() {}
 }
 
@@ -250,6 +262,25 @@ test('click opens overlay and background click closes it', () => {
   document.dispatch('click', makeEvent({ target: overlay }));
 
   assert.equal(document.documentElement.children.length, 0);
+});
+
+test('clicking linked image lets the page link handle the click', () => {
+  const { document } = loadContentScript();
+  const link = new FakeElement('a');
+  const image = new FakeImage({ width: 200, height: 150 });
+
+  link.href = 'https://example.test/page';
+  link.append(image);
+  document.documentElement.append(link);
+
+  const clickEvent = document.dispatch('click', makeEvent({ target: image }));
+  const wheelEvent = document.dispatch('wheel', makeEvent({ target: image, deltaY: -100 }));
+
+  assert.equal(clickEvent.defaultPrevented, false);
+  assert.equal(clickEvent.propagationStopped, false);
+  assert.equal(document.documentElement.children.length, 1);
+  assert.equal(wheelEvent.defaultPrevented, false);
+  assert.equal(image.classList.contains('iz-inline-zoomed'), false);
 });
 
 test('click opens overlay with largest width candidate from srcset', () => {

@@ -80,6 +80,10 @@
     return getBestSrcsetSource(image.srcset) || getImageSource(image);
   }
 
+  function isLinkedImage(image) {
+    return typeof image.closest === 'function' && Boolean(image.closest('a[href]'));
+  }
+
   function isUsefulImage(target) {
     if (!(target instanceof HTMLImageElement)) return false;
     if (!getImageSource(target)) return false;
@@ -303,6 +307,7 @@
     }
 
     if (!isUsefulImage(event.target)) return;
+    if (isLinkedImage(event.target)) return;
 
     clickedImages.add(event.target);
     event.preventDefault();

@@ -9,7 +9,8 @@ It has no popup, no account, no analytics, no storage, and no server. It runs as
 ## What It Does
 
 - Hover over a useful image to show the zoom cursor.
-- Click an image to open the full-page zoom overlay.
+- Click a useful image that is not inside a link to open the full-page zoom overlay.
+- Linked images keep their normal page link click.
 - After an image has been clicked once, scroll over that same image to zoom it inline.
 - In the overlay, scroll to zoom and drag to pan.
 - Press Escape or click the dark background to close the overlay.
@@ -53,7 +54,7 @@ scripts/package-extension.sh
 This creates:
 
 ```text
-dist/image-zoom-v0.1.0.zip
+dist/image-zoom-v0.1.1.zip
 ```
 
 The ZIP contains only the extension runtime files:
@@ -97,11 +98,11 @@ node --test tests/public-surface.test.js
 python3 -m json.tool manifest.json
 sh -n scripts/package-extension.sh
 scripts/package-extension.sh
-unzip -t dist/image-zoom-v0.1.0.zip
+unzip -t dist/image-zoom-v0.1.1.zip
 ```
 
 ## Current Status
 
-Version `0.1.0` is prepared for Chrome Web Store submission.
+Version `0.1.1` is prepared for Chrome Web Store submission.
 
 Before submitting, regenerate the ZIP after source changes, load the extension through `chrome://extensions`, test it on one real image-heavy website, and fill in the owner publisher/contact fields in the Chrome Developer Dashboard.

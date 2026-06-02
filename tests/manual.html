@@ -70,10 +70,18 @@
         </figure>
 
         <figure>
+          <a href="#linked-image-target">
+            <img alt="Linked image test" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='540' viewBox='0 0 900 540'%3E%3Crect width='900' height='540' fill='%23e0f2fe'/%3E%3Crect x='170' y='110' width='560' height='280' fill='%231d4ed8'/%3E%3Ctext x='240' y='285' font-family='Arial' font-size='56' fill='%23fff'%3ELinked image%3C/text%3E%3C/svg%3E">
+          </a>
+          <figcaption>Linked image: click should follow the page link and should not open the overlay.</figcaption>
+        </figure>
+
+        <figure>
           <img class="tiny" alt="Small icon test image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='8' fill='%231f2937'/%3E%3Ccircle cx='24' cy='24' r='12' fill='%23fff'/%3E%3C/svg%3E">
           <figcaption>Small icon: zoom cursor and click overlay should not activate.</figcaption>
         </figure>
       </div>
+      <p id="linked-image-target">Linked image target reached.</p>
     </main>
     <script src="../content.js"></script>
   </body>

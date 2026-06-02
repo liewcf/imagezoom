@@ -77,6 +77,9 @@ test('public copy describes click-first inline zoom', () => {
   assert.match(readme, /After an image has been clicked once/);
   assert.match(index, /After clicking that image once/);
   assert.match(listing, /click-first inline zoom/);
+  assert.match(readme, /Linked images keep their normal page link click/);
+  assert.match(index, /Linked images keep their normal link click/);
+  assert.match(listing, /Linked images keep their normal page link click/);
 });
 
 test('GitHub Pages workflow deploys only the static site artifact', () => {
