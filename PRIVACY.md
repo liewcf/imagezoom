@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 Image Zoom does not collect, store, sell, or share user data.
 
-The extension runs locally in your browser. It looks at image elements on the web page you are viewing so it can zoom them inline or show them in a full-page overlay.
+The extension runs locally in your browser. It looks at image elements on the web page you are viewing so it can show them in a full-page zoom overlay after double-click activation.
 
 The extension does not use analytics, cookies, tracking, accounts, remote code, or a server controlled by the developer.
 

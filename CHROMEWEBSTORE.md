@@ -1,6 +1,6 @@
 # Chrome Web Store Listing - Image Zoom
 
-> Last Updated: 2026-06-02
+> Last Updated: 2026-06-05
 
 ## Store Listing
 
@@ -10,13 +10,13 @@ Image Zoom
 
 **Short Description**
 
-Zoom images with click-first inline zoom and a full-page overlay.
+Zoom images in a full-page overlay after double-clicking them.
 
 **Detailed Description**
 
 Image Zoom lets you zoom images on normal web pages without opening a new tab.
 
-Click a useful image that is not inside a link to open a full-page overlay. Linked images keep their normal page link click. After an image has been clicked once, scroll over that same image to zoom it inline. In the overlay, scroll to zoom, drag to pan, press Escape to close, or click the dark background to close.
+Double-click a useful image that is not inside a link to open a full-page overlay. Linked images keep their normal page link click. In the overlay, scroll to zoom, drag to pan, press Escape to close, double-click to close, or click the dark background to close.
 
 The extension ignores tiny images under 80px wide or 80px tall, which helps avoid icons, avatars, sprites, unloaded images, and tracking pixels.
 
@@ -28,7 +28,7 @@ Photos
 
 **Single Purpose**
 
-Let users zoom selected images on http and https web pages inline or in a full-page overlay.
+Let users open a full-page zoom overlay for useful images on http and https web pages.
 
 **Primary Language**
 
@@ -50,8 +50,8 @@ Use `store-assets/screenshot-overlay-1280x800.png` as the first screenshot. It s
 
 | Permission | Type | Justification |
 |------------|------|---------------|
-| `http://*/*` | content script match | Image Zoom needs to run on normal http pages so it can detect image elements under the pointer and provide click-first inline zoom and overlay zoom. |
-| `https://*/*` | content script match | Image Zoom needs to run on normal https pages so it can detect image elements under the pointer and provide click-first inline zoom and overlay zoom. |
+| `http://*/*` | content script match | Image Zoom needs to run on normal http pages so it can detect double-clicks on useful image elements and provide overlay zoom. |
+| `https://*/*` | content script match | Image Zoom needs to run on normal https pages so it can detect double-clicks on useful image elements and provide overlay zoom. |
 
 The extension requests no Chrome API permissions and no `host_permissions`.
 
@@ -117,7 +117,9 @@ https://liewcf.github.io/imagezoom/
 
 | Version | Date | Changes | Status |
 |---------|------|---------|--------|
-| 0.1.1 | 2026-06-02 | Patch version bump, listing copy refresh, and linked-image click handling fix. | Draft |
+| 0.1.3 | 2026-06-05 | Better double-click activation on pages with photo interaction layers, including Facebook-style photo viewers. | Draft |
+| 0.1.2 | 2026-06-05 | Double-click overlay activation, no inline page zoom, and refreshed package copy. | Superseded |
+| 0.1.1 | 2026-06-02 | Patch version bump, listing copy refresh, and linked-image click handling fix. | Superseded |
 | 0.1.0 | 2026-05-29 | Initial Chrome Web Store package with content-script image zoom, PNG icons, store assets, privacy policy text, and clean ZIP packaging. | Draft |
 
 ## Review Notes
@@ -126,12 +128,12 @@ https://liewcf.github.io/imagezoom/
 
 - The extension runs on `http://` and `https://` pages only.
 - It does not run on `chrome://` pages, Chrome Web Store pages, extension pages, or local file URLs.
-- It has no popup, settings page, storage, service worker, or custom site list in version `0.1.1`.
+- It has no popup, settings page, storage, service worker, or custom site list in version `0.1.3`.
 
 ### Submission Steps
 
 1. Run `scripts/package-extension.sh`.
-2. Upload `dist/image-zoom-v0.1.1.zip` in the Chrome Developer Dashboard.
+2. Upload `dist/image-zoom-v0.1.3.zip` in the Chrome Developer Dashboard.
 3. Fill in the Store Listing, Privacy, and Distribution tabs using this file.
 4. Add the hosted privacy policy URL: `https://liewcf.github.io/imagezoom/privacy/`.
 5. Add the owner publisher name, contact email, support URL or email, and homepage URL.

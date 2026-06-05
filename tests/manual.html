@@ -56,7 +56,7 @@
       <div class="grid">
         <figure>
           <img alt="Large landscape test image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='540' viewBox='0 0 900 540'%3E%3Crect width='900' height='540' fill='%23dbeafe'/%3E%3Ccircle cx='240' cy='210' r='120' fill='%23f97316'/%3E%3Crect x='430' y='120' width='310' height='250' fill='%230f766e'/%3E%3Ctext x='450' y='430' font-family='Arial' font-size='54' fill='%23111827'%3ELandscape%3C/text%3E%3C/svg%3E">
-          <figcaption>Large image: hover, wheel, and click should work.</figcaption>
+          <figcaption>Large image: double-click should open the overlay.</figcaption>
         </figure>
 
         <figure>
@@ -66,19 +66,19 @@
 
         <figure>
           <img alt="Wide banner test image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='360' viewBox='0 0 1200 360'%3E%3Crect width='1200' height='360' fill='%23fee2e2'/%3E%3Cpath d='M0 260 C220 80 360 420 590 210 C780 40 940 320 1200 120 L1200 360 L0 360 Z' fill='%230ea5e9'/%3E%3Ctext x='430' y='190' font-family='Arial' font-size='58' fill='%23111827'%3EWide image%3C/text%3E%3C/svg%3E">
-          <figcaption>Wide image: zoom and overlay should work.</figcaption>
+          <figcaption>Wide image: overlay zoom and pan should work.</figcaption>
         </figure>
 
         <figure>
           <a href="#linked-image-target">
             <img alt="Linked image test" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='540' viewBox='0 0 900 540'%3E%3Crect width='900' height='540' fill='%23e0f2fe'/%3E%3Crect x='170' y='110' width='560' height='280' fill='%231d4ed8'/%3E%3Ctext x='240' y='285' font-family='Arial' font-size='56' fill='%23fff'%3ELinked image%3C/text%3E%3C/svg%3E">
           </a>
-          <figcaption>Linked image: click should follow the page link and should not open the overlay.</figcaption>
+          <figcaption>Linked image: click and double-click should stay with the page link.</figcaption>
         </figure>
 
         <figure>
           <img class="tiny" alt="Small icon test image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='8' fill='%231f2937'/%3E%3Ccircle cx='24' cy='24' r='12' fill='%23fff'/%3E%3C/svg%3E">
-          <figcaption>Small icon: zoom cursor and click overlay should not activate.</figcaption>
+          <figcaption>Small icon: double-click overlay should not activate.</figcaption>
         </figure>
       </div>
       <p id="linked-image-target">Linked image target reached.</p>

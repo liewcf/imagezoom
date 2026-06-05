@@ -2,14 +2,10 @@
   'use strict';
 
   const MIN_IMAGE_SIZE = 80;
-  const INLINE_MIN_ZOOM = 1;
-  const INLINE_MAX_ZOOM = 5;
   const OVERLAY_MIN_ZOOM = 1;
   const OVERLAY_MAX_ZOOM = 8;
   const ZOOM_STEP = 0.25;
 
-  const inlineZoom = new WeakMap();
-  const clickedImages = new WeakSet();
   let overlayState = null;
 
   function clamp(value, min, max) {
@@ -102,68 +98,17 @@
     );
   }
 
-  function getInlineZoom(image) {
-    return inlineZoom.get(image) || INLINE_MIN_ZOOM;
+  function getImageUnderPointer(event) {
+    if (typeof document.elementsFromPoint !== 'function') return null;
+
+    return document.elementsFromPoint(event.clientX, event.clientY)
+      .find(isUsefulImage) || null;
   }
 
-  function setInlineZoom(image, zoom, originX, originY) {
-    const nextZoom = roundZoom(clamp(zoom, INLINE_MIN_ZOOM, INLINE_MAX_ZOOM));
+  function getActivationImage(event) {
+    if (isUsefulImage(event.target)) return event.target;
 
-    if (nextZoom <= INLINE_MIN_ZOOM) {
-      inlineZoom.delete(image);
-      image.classList.remove('iz-inline-zoomed');
-      image.style.removeProperty('transform');
-      image.style.removeProperty('transform-origin');
-      return;
-    }
-
-    inlineZoom.set(image, nextZoom);
-    image.classList.add('iz-inline-zoomed');
-    image.style.transformOrigin = `${originX}% ${originY}%`;
-    image.style.transform = `scale(${nextZoom})`;
-  }
-
-  function getPointerOrigin(event, image) {
-    const rect = image.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width) * 100;
-    const y = ((event.clientY - rect.top) / rect.height) * 100;
-
-    return {
-      x: clamp(x, 0, 100),
-      y: clamp(y, 0, 100)
-    };
-  }
-
-  function onPointerOver(event) {
-    if (!isUsefulImage(event.target)) return;
-    event.target.classList.add('iz-zoom-target');
-  }
-
-  function onPointerOut(event) {
-    if (!(event.target instanceof HTMLImageElement)) return;
-    event.target.classList.remove('iz-zoom-target');
-  }
-
-  function onWheel(event) {
-    if (overlayState) return;
-    if (!isUsefulImage(event.target)) return;
-    if (!clickedImages.has(event.target)) return;
-    if (event.deltaY === 0) return;
-
-    const image = event.target;
-    const direction = event.deltaY < 0 ? 1 : -1;
-    const currentZoom = getInlineZoom(image);
-    const nextZoom = roundZoom(
-      clamp(currentZoom + direction * ZOOM_STEP, INLINE_MIN_ZOOM, INLINE_MAX_ZOOM)
-    );
-
-    if (nextZoom === currentZoom) return;
-
-    event.preventDefault();
-
-    const origin = getPointerOrigin(event, image);
-
-    setInlineZoom(image, nextZoom, origin.x, origin.y);
+    return getImageUnderPointer(event);
   }
 
   function openOverlay(image) {
@@ -303,27 +248,36 @@
   function onClick(event) {
     if (overlayState) {
       if (event.target === overlayState.overlay) closeOverlay();
+    }
+  }
+
+  function onDoubleClick(event) {
+    if (overlayState) {
+      if (overlayState.overlay.contains(event.target)) {
+        event.preventDefault();
+        event.stopPropagation();
+        closeOverlay();
+      }
       return;
     }
 
-    if (!isUsefulImage(event.target)) return;
-    if (isLinkedImage(event.target)) return;
+    const image = getActivationImage(event);
 
-    clickedImages.add(event.target);
+    if (!image) return;
+    if (isLinkedImage(image)) return;
+
     event.preventDefault();
     event.stopPropagation();
-    openOverlay(event.target);
+    openOverlay(image);
   }
 
   function onKeyDown(event) {
     if (event.key === 'Escape') closeOverlay();
   }
 
-  document.addEventListener('pointerover', onPointerOver, true);
-  document.addEventListener('pointerout', onPointerOut, true);
-  document.addEventListener('wheel', onWheel, { capture: true, passive: false });
   document.addEventListener('wheel', onOverlayWheel, { capture: true, passive: false });
   document.addEventListener('click', onClick, true);
+  document.addEventListener('dblclick', onDoubleClick, true);
   document.addEventListener('keydown', onKeyDown, true);
   document.addEventListener('pointerdown', onOverlayPointerDown, true);
   document.addEventListener('pointermove', onOverlayPointerMove, true);

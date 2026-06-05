@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Image Zoom",
-  "version": "0.1.1",
-  "description": "Zoom selected images on web pages inline or in a full-page overlay.",
+  "version": "0.1.3",
+  "description": "Zoom images in a full-page overlay after double-clicking them.",
   "icons": {
     "16": "icons/icon-16.png",
     "48": "icons/icon-48.png",

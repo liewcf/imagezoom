@@ -65,18 +65,22 @@ test('homepage navigation and feature sections stay simple', () => {
   assert.doesNotMatch(index, /section\s*{[^}]*background:\s*var\(--panel\)/s);
 });
 
-test('public copy describes click-first inline zoom', () => {
+test('public copy describes double-click overlay activation', () => {
   const readme = read('README.md');
   const index = read('site/index.html');
   const listing = read('CHROMEWEBSTORE.md');
-  const removedCopy = /Scroll the mouse wheel while hovering an image to zoom it inline/;
 
-  assert.doesNotMatch(readme, removedCopy);
+  assert.doesNotMatch(readme, /inline zoom|zoom it inline|zoom selected images inline/i);
+  assert.doesNotMatch(index, /inline zoom|zoom inline|zoom selected images inline/i);
+  assert.doesNotMatch(listing, /inline zoom|zoom it inline|zoom selected images inline/i);
   assert.doesNotMatch(index, /Hover over an image and scroll to zoom inline/);
+  assert.doesNotMatch(readme, /After an image has been clicked once/);
+  assert.doesNotMatch(index, /After clicking that image once/);
   assert.doesNotMatch(listing, /hover wheel zoom/i);
-  assert.match(readme, /After an image has been clicked once/);
-  assert.match(index, /After clicking that image once/);
-  assert.match(listing, /click-first inline zoom/);
+  assert.doesNotMatch(listing, /click-first/);
+  assert.match(readme, /Double-click a useful image/);
+  assert.match(index, /Double-click an unlinked image/);
+  assert.match(listing, /Double-click a useful image/);
   assert.match(readme, /Linked images keep their normal page link click/);
   assert.match(index, /Linked images keep their normal link click/);
   assert.match(listing, /Linked images keep their normal page link click/);

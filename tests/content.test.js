@@ -94,11 +94,16 @@ class FakeDocument {
   constructor() {
     this.documentElement = new FakeElement('html');
     this.listeners = new Map();
+    this.elementsAtPoint = [];
   }
 
   createElement(tagName) {
     if (tagName === 'img') return new FakeImage();
     return new FakeElement(tagName);
+  }
+
+  elementsFromPoint() {
+    return this.elementsAtPoint;
   }
 
   addEventListener(type, handler) {
@@ -152,7 +157,7 @@ test('stylesheet does not expose global overlay selectors to page content', () =
   assert.doesNotMatch(css, /(^|})\s*\.iz-overlay\b/);
 });
 
-test('hover marks useful images and ignores tiny images', () => {
+test('hover does not mark images before activation', () => {
   const { document } = loadContentScript();
   const useful = new FakeImage({ width: 200, height: 150 });
   const tiny = new FakeImage({ width: 48, height: 48 });
@@ -160,7 +165,7 @@ test('hover marks useful images and ignores tiny images', () => {
   document.dispatch('pointerover', makeEvent({ target: useful }));
   document.dispatch('pointerover', makeEvent({ target: tiny }));
 
-  assert.equal(useful.classList.contains('iz-zoom-target'), true);
+  assert.equal(useful.classList.contains('iz-zoom-target'), false);
   assert.equal(tiny.classList.contains('iz-zoom-target'), false);
 });
 
@@ -186,42 +191,34 @@ test('wheel before image click does not zoom or block page scroll', () => {
   assert.equal(image.style.transform, undefined);
 });
 
-test('clicking one image does not unlock wheel zoom for another image', () => {
-  const { document } = loadContentScript();
-  const clickedImage = new FakeImage({ width: 200, height: 150 });
-  const otherImage = new FakeImage({ width: 200, height: 150 });
-
-  document.dispatch('click', makeEvent({ target: clickedImage }));
-  const overlay = document.documentElement.children[0];
-  document.dispatch('click', makeEvent({ target: overlay }));
-
-  const event = document.dispatch('wheel', makeEvent({ target: otherImage, deltaY: -100 }));
-
-  assert.equal(event.defaultPrevented, false);
-  assert.equal(otherImage.classList.contains('iz-inline-zoomed'), false);
-  assert.equal(otherImage.style.transform, undefined);
-});
-
-test('wheel zooms a clicked useful image inline and resets at minimum zoom', () => {
+test('normal click does not open overlay or unlock wheel zoom', () => {
   const { document } = loadContentScript();
   const image = new FakeImage({ width: 200, height: 150 });
 
-  document.dispatch('click', makeEvent({ target: image }));
-  const overlay = document.documentElement.children[0];
-  document.dispatch('click', makeEvent({ target: overlay }));
+  const clickEvent = document.dispatch('click', makeEvent({ target: image }));
+  const wheelEvent = document.dispatch('wheel', makeEvent({ target: image, deltaY: -100 }));
+
+  assert.equal(clickEvent.defaultPrevented, false);
+  assert.equal(clickEvent.propagationStopped, false);
+  assert.equal(document.documentElement.children.length, 0);
+  assert.equal(wheelEvent.defaultPrevented, false);
+  assert.equal(image.classList.contains('iz-inline-zoomed'), false);
+  assert.equal(image.style.transform, undefined);
+});
+
+test('wheel never zooms page images inline', () => {
+  const { document } = loadContentScript();
+  const image = new FakeImage({ width: 200, height: 150 });
+
+  document.dispatch('dblclick', makeEvent({ target: image }));
+  document.dispatch('dblclick', makeEvent({ target: document.documentElement.children[0] }));
 
   const zoomInEvent = document.dispatch(
     'wheel',
     makeEvent({ target: image, deltaY: -100 })
   );
 
-  assert.equal(zoomInEvent.defaultPrevented, true);
-  assert.equal(image.classList.contains('iz-inline-zoomed'), true);
-  assert.equal(image.style.transform, 'scale(1.25)');
-  assert.equal(image.style.transformOrigin, '50% 50%');
-
-  document.dispatch('wheel', makeEvent({ target: image, deltaY: 100 }));
-
+  assert.equal(zoomInEvent.defaultPrevented, false);
   assert.equal(image.classList.contains('iz-inline-zoomed'), false);
   assert.equal(image.style.transform, undefined);
   assert.equal(image.style.transformOrigin, undefined);
@@ -247,11 +244,11 @@ test('wheel with zero delta does not zoom or block page scroll', () => {
   assert.equal(image.style.transform, undefined);
 });
 
-test('click opens overlay and background click closes it', () => {
+test('double click opens overlay and background click closes it', () => {
   const { document } = loadContentScript();
   const image = new FakeImage({ width: 200, height: 150 });
 
-  const openEvent = document.dispatch('click', makeEvent({ target: image }));
+  const openEvent = document.dispatch('dblclick', makeEvent({ target: image }));
   const overlay = document.documentElement.children[0];
 
   assert.equal(openEvent.defaultPrevented, true);
@@ -264,7 +261,35 @@ test('click opens overlay and background click closes it', () => {
   assert.equal(document.documentElement.children.length, 0);
 });
 
-test('clicking linked image lets the page link handle the click', () => {
+test('double click over a page interaction layer opens the useful image under the pointer', () => {
+  const { document } = loadContentScript();
+  const layer = new FakeElement('div');
+  const image = new FakeImage({ width: 200, height: 150 });
+
+  document.elementsAtPoint = [layer, image];
+
+  const openEvent = document.dispatch('dblclick', makeEvent({ target: layer }));
+  const overlay = document.documentElement.children[0];
+
+  assert.equal(openEvent.defaultPrevented, true);
+  assert.equal(openEvent.propagationStopped, true);
+  assert.equal(overlay.classList.contains('iz-overlay'), true);
+  assert.equal(overlay.children[0].src, image.src);
+});
+
+test('double clicking overlay closes it', () => {
+  const { document } = loadContentScript();
+  const image = new FakeImage({ width: 200, height: 150 });
+
+  document.dispatch('dblclick', makeEvent({ target: image }));
+  const overlayImage = document.documentElement.children[0].children[0];
+
+  document.dispatch('dblclick', makeEvent({ target: overlayImage }));
+
+  assert.equal(document.documentElement.children.length, 0);
+});
+
+test('linked image clicks and double clicks stay with the page', () => {
   const { document } = loadContentScript();
   const link = new FakeElement('a');
   const image = new FakeImage({ width: 200, height: 150 });
@@ -274,16 +299,37 @@ test('clicking linked image lets the page link handle the click', () => {
   document.documentElement.append(link);
 
   const clickEvent = document.dispatch('click', makeEvent({ target: image }));
+  const doubleClickEvent = document.dispatch('dblclick', makeEvent({ target: image }));
   const wheelEvent = document.dispatch('wheel', makeEvent({ target: image, deltaY: -100 }));
 
   assert.equal(clickEvent.defaultPrevented, false);
   assert.equal(clickEvent.propagationStopped, false);
+  assert.equal(doubleClickEvent.defaultPrevented, false);
+  assert.equal(doubleClickEvent.propagationStopped, false);
   assert.equal(document.documentElement.children.length, 1);
   assert.equal(wheelEvent.defaultPrevented, false);
   assert.equal(image.classList.contains('iz-inline-zoomed'), false);
 });
 
-test('click opens overlay with largest width candidate from srcset', () => {
+test('double click over a page interaction layer still leaves linked images to the page', () => {
+  const { document } = loadContentScript();
+  const link = new FakeElement('a');
+  const layer = new FakeElement('div');
+  const image = new FakeImage({ width: 200, height: 150 });
+
+  link.href = 'https://example.test/page';
+  link.append(image);
+  document.documentElement.append(link);
+  document.elementsAtPoint = [layer, image];
+
+  const doubleClickEvent = document.dispatch('dblclick', makeEvent({ target: layer }));
+
+  assert.equal(doubleClickEvent.defaultPrevented, false);
+  assert.equal(doubleClickEvent.propagationStopped, false);
+  assert.equal(document.documentElement.children.length, 1);
+});
+
+test('double click opens overlay with largest width candidate from srcset', () => {
   const { document } = loadContentScript();
   const image = new FakeImage({
     width: 200,
@@ -296,7 +342,7 @@ test('click opens overlay with largest width candidate from srcset', () => {
     'https://example.test/medium.jpg 800w'
   ].join(', ');
 
-  document.dispatch('click', makeEvent({ target: image }));
+  document.dispatch('dblclick', makeEvent({ target: image }));
   const overlay = document.documentElement.children[0];
   const overlayImage = overlay.children[0];
 
@@ -307,7 +353,7 @@ test('overlay wheel with zero delta does not zoom or block page scroll', () => {
   const { document } = loadContentScript();
   const image = new FakeImage({ width: 200, height: 150 });
 
-  document.dispatch('click', makeEvent({ target: image }));
+  document.dispatch('dblclick', makeEvent({ target: image }));
   const overlay = document.documentElement.children[0];
   const overlayImage = overlay.children[0];
 
@@ -327,7 +373,7 @@ test('overlay wheel down at minimum zoom does not block page scroll', () => {
   const { document } = loadContentScript();
   const image = new FakeImage({ width: 200, height: 150 });
 
-  document.dispatch('click', makeEvent({ target: image }));
+  document.dispatch('dblclick', makeEvent({ target: image }));
   const overlay = document.documentElement.children[0];
   const overlayImage = overlay.children[0];
 
@@ -343,7 +389,7 @@ test('overlay wheel up at maximum zoom does not block page scroll', () => {
   const { document } = loadContentScript();
   const image = new FakeImage({ width: 200, height: 150 });
 
-  document.dispatch('click', makeEvent({ target: image }));
+  document.dispatch('dblclick', makeEvent({ target: image }));
   const overlay = document.documentElement.children[0];
   const overlayImage = overlay.children[0];
 
