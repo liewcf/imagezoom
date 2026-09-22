@@ -117,6 +117,7 @@ https://liewcf.github.io/imagezoom/
 
 | Version | Date | Changes | Status |
 |---------|------|---------|--------|
+| 0.1.4 | 2026-09-22 | Performance fix: overlay event listeners now attach only while the overlay is open, so normal page scrolling keeps full browser optimization. | Draft |
 | 0.1.3 | 2026-06-05 | Better double-click activation on pages with photo interaction layers, including Facebook-style photo viewers. | Draft |
 | 0.1.2 | 2026-06-05 | Double-click overlay activation, no inline page zoom, and refreshed package copy. | Superseded |
 | 0.1.1 | 2026-06-02 | Patch version bump, listing copy refresh, and linked-image click handling fix. | Superseded |
@@ -128,12 +129,12 @@ https://liewcf.github.io/imagezoom/
 
 - The extension runs on `http://` and `https://` pages only.
 - It does not run on `chrome://` pages, Chrome Web Store pages, extension pages, or local file URLs.
-- It has no popup, settings page, storage, service worker, or custom site list in version `0.1.3`.
+- It has no popup, settings page, storage, service worker, or custom site list in version `0.1.4`.
 
 ### Submission Steps
 
 1. Run `scripts/package-extension.sh`.
-2. Upload `dist/image-zoom-v0.1.3.zip` in the Chrome Developer Dashboard.
+2. Upload `dist/image-zoom-v0.1.4.zip` in the Chrome Developer Dashboard.
 3. Fill in the Store Listing, Privacy, and Distribution tabs using this file.
 4. Add the hosted privacy policy URL: `https://liewcf.github.io/imagezoom/privacy/`.
 5. Add the owner publisher name, contact email, support URL or email, and homepage URL.
