@@ -163,6 +163,7 @@
       dragging: false
     };
 
+    attachOverlayListeners();
     updateOverlayTransform();
   }
 
@@ -171,6 +172,7 @@
 
     overlayState.overlay.remove();
     overlayState = null;
+    detachOverlayListeners();
   }
 
   function updateOverlayTransform() {
@@ -235,7 +237,7 @@
   }
 
   function stopOverlayDrag() {
-    if (!overlayState) return;
+    if (!overlayState || !overlayState.dragging) return;
 
     overlayState.dragging = false;
     overlayState.image.classList.remove('iz-dragging');
@@ -275,12 +277,29 @@
     if (event.key === 'Escape') closeOverlay();
   }
 
-  document.addEventListener('wheel', onOverlayWheel, { capture: true, passive: false });
-  document.addEventListener('click', onClick, true);
+  function attachOverlayListeners() {
+    document.addEventListener('wheel', onOverlayWheel, { capture: true, passive: false });
+    document.addEventListener('click', onClick, true);
+    document.addEventListener('keydown', onKeyDown, true);
+    document.addEventListener('pointerdown', onOverlayPointerDown, true);
+    document.addEventListener('pointermove', onOverlayPointerMove, true);
+    document.addEventListener('pointerup', stopOverlayDrag, true);
+    document.addEventListener('pointercancel', stopOverlayDrag, true);
+  }
+
+  function detachOverlayListeners() {
+    document.removeEventListener('wheel', onOverlayWheel, { capture: true, passive: false });
+    document.removeEventListener('click', onClick, true);
+    document.removeEventListener('keydown', onKeyDown, true);
+    document.removeEventListener('pointerdown', onOverlayPointerDown, true);
+    document.removeEventListener('pointermove', onOverlayPointerMove, true);
+    document.removeEventListener('pointerup', stopOverlayDrag, true);
+    document.removeEventListener('pointercancel', stopOverlayDrag, true);
+  }
+
+  // Only dblclick stays registered while the overlay is closed: it is the
+  // activation gesture. The non-passive wheel listener and the other
+  // overlay-scoped listeners attach with the overlay so normal pages keep
+  // compositor-driven scrolling.
   document.addEventListener('dblclick', onDoubleClick, true);
-  document.addEventListener('keydown', onKeyDown, true);
-  document.addEventListener('pointerdown', onOverlayPointerDown, true);
-  document.addEventListener('pointermove', onOverlayPointerMove, true);
-  document.addEventListener('pointerup', stopOverlayDrag, true);
-  document.addEventListener('pointercancel', stopOverlayDrag, true);
 })();

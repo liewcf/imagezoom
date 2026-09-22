@@ -112,8 +112,14 @@ class FakeDocument {
     this.listeners.set(type, handlers);
   }
 
+  removeEventListener(type, handler) {
+    const handlers = this.listeners.get(type) || [];
+    const index = handlers.indexOf(handler);
+    if (index >= 0) handlers.splice(index, 1);
+  }
+
   dispatch(type, event) {
-    for (const handler of this.listeners.get(type) || []) {
+    for (const handler of [...(this.listeners.get(type) || [])]) {
       handler(event);
     }
     return event;
@@ -403,4 +409,65 @@ test('overlay wheel up at maximum zoom does not block page scroll', () => {
 
   assert.equal(event.defaultPrevented, false);
   assert.equal(overlayImage.style.transform, 'translate(0px, 0px) scale(8)');
+});
+
+test('overlay-only listeners attach with the overlay and detach on close', () => {
+  const { document } = loadContentScript();
+  const overlayOnlyEvents = [
+    'wheel',
+    'click',
+    'keydown',
+    'pointerdown',
+    'pointermove',
+    'pointerup',
+    'pointercancel'
+  ];
+
+  for (const type of overlayOnlyEvents) {
+    assert.equal(
+      (document.listeners.get(type) || []).length,
+      0,
+      `${type} must not be registered while the overlay is closed`
+    );
+  }
+  assert.equal((document.listeners.get('dblclick') || []).length, 1);
+
+  const image = new FakeImage({ width: 200, height: 150 });
+  document.dispatch('dblclick', makeEvent({ target: image }));
+
+  for (const type of overlayOnlyEvents) {
+    assert.equal(
+      (document.listeners.get(type) || []).length,
+      1,
+      `${type} must be registered while the overlay is open`
+    );
+  }
+
+  document.dispatch('keydown', makeEvent({ key: 'Escape' }));
+
+  assert.equal(document.documentElement.children.length, 0);
+  for (const type of overlayOnlyEvents) {
+    assert.equal(
+      (document.listeners.get(type) || []).length,
+      0,
+      `${type} must be removed after the overlay closes`
+    );
+  }
+});
+
+test('overlay drag flow still sets, pans, and restores the image style', () => {
+  const { document } = loadContentScript();
+  const image = new FakeImage({ width: 200, height: 150 });
+
+  document.dispatch('dblclick', makeEvent({ target: image }));
+  const overlayImage = document.documentElement.children[0].children[0];
+
+  document.dispatch('pointerdown', makeEvent({ target: overlayImage }));
+  assert.equal(overlayImage.style.transition, 'none');
+
+  document.dispatch('pointermove', makeEvent({ clientX: 130, clientY: 95 }));
+  assert.equal(overlayImage.style.transform, 'translate(30px, 20px) scale(1)');
+
+  document.dispatch('pointerup', makeEvent({ target: overlayImage }));
+  assert.equal(overlayImage.style.transition, 'transform 80ms ease');
 });
